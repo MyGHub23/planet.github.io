@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Explore the wonders of the solar system interactively with Planet Explorer by Abu Momen. Learn about planets, orbits, and fun facts!">
+    <meta name="author" content="Abu Momen">
+    <meta name="keywords"
+        content="Planet Explorer, Solar System, Astronomy, Educational App, Interactive Learning, Abu Momen">
+    <meta property="og:title" content="Planet Explorer - Interactive Solar System">
+    <meta property="og:description"
+        content="Dive into an interactive journey through the solar system with Planet Explorer by Abu Momen. Learn about planets, orbits, and fascinating facts!">
+    <meta property="og:image" content="path/to/preview-image.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://softfaculty.com/planet/planet.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Planet Explorer - Interactive Solar System">
+    <meta name="twitter:description"
+        content="Explore the solar system interactively with Planet Explorer. Learn and have fun!">
+    <meta name="twitter:image" content="path/to/preview-image.jpg">
+    <title>Planet Explorer by Abu Momen</title>
+
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d1b2a;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Responsive container */
+        .container {
+            position: relative;
+            width: 90vmin;
+            height: 90vmin;
+            max-width: 1000px;
+            max-height: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* background-color: #1b263b; */
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        #sun {
+            position: absolute;
+            width: 12%;
+            height: 12%;
+            background-color: #ffd700;
+            border-radius: 50%;
+            box-shadow: 0 0 30px 20px rgba(255, 215, 0, 0.8);
+            z-index: 2;
+        }
+
+        /* Orbit styling */
+        .orbit {
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Individual orbits */
+        .orbit.mercury {
+            width: 22%;
+            height: 22%;
+            border: 1px solid yellow;
+
+        }
+
+        .orbit.venus {
+            width: 40%;
+            height: 40%;
+
+        }
+
+        .orbit.earth {
+            width: 54%;
+            height: 54%;
+            border: 1px solid rgb(206, 217, 183);
+        }
+
+        .orbit.mars {
+            width: 78%;
+            height: 78%;
+            border: 1px solid rgb(168, 229, 208);
+        }
+
+        .orbit.jupiter {
+            width: 88%;
+            height: 88%;
+
+
+        }
+
+        .orbit.saturn {
+            width: 98%;
+            height: 98%;
+
+        }
+
+        .orbit.uranus {
+            width: 100%;
+            height: 100%;
+            border: 1px solid red;
+        }
+
+        .orbit.neptune {
+            width: 110%;
+            height: 110%;
+
+        }
+
+        /* Planet styling */
+        /* Anticlockwise spin */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(-360deg);
+            }
+        }
+
+        .planet {
+            position: absolute;
+            width: 5%;
+            /* Default size increased */
+            height: 5%;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 0 10px 3px rgba(107, 147, 214, 0.8);
+            cursor: pointer;
+            transition: transform 0.3s;
+
+            animation: spin 5s linear infinite;
+            /* Adjust the duration as needed */
+            transform-origin: center;
+        }
+
+        /* Planet positions and images */
+        #mercury {
+            background-image: url('images/mercury.jpg');
+            top: 50%;
+            left: 59%;
+            transform: translate(-50%, -50%);
+        }
+
+        #venus {
+            background-image: url('images/venus.jpg');
+            top: 62%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #earth {
+            background-image: url('images/earth.jpg');
+            top: 40%;
+            left: 67%;
+            transform: translate(-50%, -50%);
+        }
+
+        #moon {
+            background-image: url('images/moon.jpg');
+            width: 2%;
+            height: 2%;
+            top: 40%;
+            left: 72%;
+            /* Adjusted to move the moon further right */
+            transform: translate(-50%, -50%);
+        }
+
+        /* #moon { background-image: url('images/moon.jpg'); width: 2%; height: 2%; top: 50%; left: 68%; transform: translate(-50%, -50%); } */
+
+        #mars {
+            background-image: url('images/mars.jpg');
+            top: 65%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+        }
+
+        #jupiter {
+            background-image: url('images/jupiter.jpg');
+            top: 18%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #saturn {
+            background-image: url('images/saturn.jpg');
+            top: 50%;
+            left: 15%;
+            transform: translate(-50%, -50%);
+        }
+
+        #uranus {
+            background-image: url('images/uranus.jpg');
+            top: 85%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #neptune {
+            background-image: url('images/neptune.jpg');
+            top: 40%;
+            left: 2%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Info panel styling */
+        #info-panel {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            /* max-width: 900px; */
+            background-color: rgba(22, 4, 99, 0.8);
+            color: #ffffff;
+            padding: 2px;
+            border-radius: 10px;
+            text-align: justify;
+            display: none;
+            z-index: 10;
+            /* font-size: 1rem; */
+        }
+
+        #info-panel h2 {
+            display: inline;
+            margin: 0;
+            color: #ffdd57;
+            font-size: 1rem;
+        }
+
+        #info-panel p {
+            display: inline;
+            margin: 0;
+            font-size: 1rem;
+        }
+
+
+        /* Buttons styling */
+        .button {
+            width: 40px;
+            /* Set desired width */
+            height: 40px;
+            /* Set desired height */
+            background-size: cover;
+            /* Ensure the image fills the button */
+            background-repeat: no-repeat;
+            /* Prevent image repetition */
+            background-position: center;
+            /* Center the image within the button */
+            border: none;
+            /* Remove default button border */
+            cursor: pointer;
+            /* Make it clickable */
+            background-color: black;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            /* Center buttons horizontally */
+            align-items: center;
+            /* Align buttons vertically */
+            gap: 30px;
+            /* Adjust spacing between buttons as needed */
+            position: absolute;
+            top: 5%;
+            /* Adjust position from the top */
+            left: 50%;
+            /* Center horizontally */
+            transform: translateX(-50%);
+            /* Correct the centering due to absolute positioning */
+            width: auto;
+            /* Let the width adjust based on content */
+            /* background-color: white;
+            border-radius: 20px; */
+
+        }
+
+        .button:hover {
+            background-color: #005f99;
+        }
+
+        #help-button {
+            left: 40%;
+        }
+
+        #audio-button {
+            right: 40%;
+        }
+
+
+
+        /* Help text styling */
+        #help-text-container {
+            display: none;
+            /* Hidden by default */
+            position: absolute;
+            top: 12%;
+            /* Position a bit higher on the screen */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgb(4, 4, 98);
+            color: #ffffff;
+            padding: 2px;
+            border-radius: 5px;
+            max-width: 70%;
+            max-height: 500px;
+            /* Frame height for scrolling */
+            overflow-y: auto;
+            /* Enables vertical scrolling */
+            text-align: justify;
+            font-size: 1rem;
+            z-index: 10;
+            border-radius: 10px;
+            /* border: 1px solid green; */
+            /* Frame border */
+            box-sizing: border-box;
+            /* Ensures padding is included in width */
+            line-height: 1.2;
+        }
+
+        .help-text {
+            margin: 0;
+            padding: 4px;
+        }
+
+        #quiz-button {
+            bottom: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #quiz-container,
+        #fact-container {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 300px;
+            background-color: rgba(26, 3, 119, 0.7);
+            color: white;
+            padding: 2px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 10;
+            display: none;
+
+        }
+
+
+        /* Adjust buttons to be side by side on smaller screens */
+        @media (max-width: 480px) {
+
+            .button {
+                width: 25px;
+                height: 25px;
+
+            }
+
+            .button-container {
+                gap: 20px;
+            }
+
+            #help-button {
+                left: 30%;
+            }
+
+            #audio-button {
+                right: 30%;
+            }
+
+            #help-text-container {
+                top: 16%;
+                font-size: 0.8rem;
+                max-width: 90%;
+                padding: 2px;
+            }
+
+            #quiz-container {
+                padding: 2px;
+                width: 90%;
+                font-size: 0.8rem;
+                max-width: 200px;
+                line-height: 1.2;
+            }
+
+            #fact-container {
+                width: 90%;
+                /* Increase width slightly for better readability */
+                max-width: 200px;
+                /* Limit the container width */
+                font-size: 0.8rem;
+                /* Reduce font size */
+                padding: 2px;
+                /* Adjust padding */
+                line-height: 1.2;
+                /* Further reduce line height */
+            }
+
+
+            #info-panel {
+                width: 60%;
+                font-size: 0.8rem;
+                margin: 0;
+                padding: 0;
+            }
+        }
+    </style>
+
+    <!-- Metadata, styles, and structured data -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Planet Explorer",
+            "url": "https://softfaculty.com/planet/planet.html",
+            "author": {
+                "@type": "Person",
+                "name": "Abu Momen"
+            },
+            "description": "An interactive solar system exploration app where you can learn about planets, orbits, and fun facts.",
+            "applicationCategory": "Education",
+            "operatingSystem": "All",
+            "image": "path/to/preview-image.jpg",
+            "datePublished": "2024-11-07"
+        }
+        </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="sun"></div>
+
+        <div class="button-container">
+            <button id="help-button" class="button" style="background-image: url('./images/help.png');"></button>
+            <button id="audio-button" class="button" style="background-image: url('./images/audio.png');"></button>
+            <button id="quiz-button" class="button" style="background-image: url('./images/quiz.png');"></button>
+        </div>
+
+        <div id="quiz-container">
+            <!-- <h3>Quiz Time!</h3> -->
+            <p id="quiz-question"></p>
+            <div id="quiz-options"></div>
+            <p id="quiz-feedback" style="display: none;"></p>
+            <button id="next-question" style="display: none;">Next</button>
+        </div>
+
+        <div id="fact-container">
+            <!-- <h3>Did You Know?</h3> -->
+            <p id="fun-fact"></p>
+        </div>
+
+        <div id="help-text-container" style="display: none;" data-toggle-state="0"> </div>
+
+
+        <!-- Orbits for planets -->
+        <div class="orbit mercury"></div>
+        <div class="orbit venus"></div>
+        <div class="orbit earth"></div>
+        <div class="orbit mars"></div>
+        <div class="orbit jupiter"></div>
+        <div class="orbit saturn"></div>
+        <div class="orbit uranus"></div>
+        <div class="orbit neptune"></div>
+        <div class="orbit sun"></div>
+
+        <!-- Planets with tooltips -->
+        <div id="mercury" class="planet" data-name="Mercury" onclick="showInfo('Mercury')"></div>
+        <div id="venus" class="planet" data-name="Venus" onclick="showInfo('Venus')"></div>
+        <div id="earth" class="planet" data-name="Earth" onclick="showInfo('Earth')"></div>
+        <div id="moon" class="planet" data-name="Moon" onclick="showInfo('Moon')"></div>
+        <div id="mars" class="planet" data-name="Mars" onclick="showInfo('Mars')"></div>
+        <div id="jupiter" class="planet" data-name="Jupiter" onclick="showInfo('Jupiter')"></div>
+        <div id="saturn" class="planet" data-name="Saturn" onclick="showInfo('Saturn')"></div>
+        <div id="uranus" class="planet" data-name="Uranus" onclick="showInfo('Uranus')"></div>
+        <div id="neptune" class="planet" data-name="Neptune" onclick="showInfo('Neptune')"></div>
+        <div id="sun" class="planet" data-name="sun" onclick="showInfo('sun')"></div>
+        <!-- Info panel for displaying planet information -->
+        <div id="info-panel">
+            <h2 id="planet-name"></h2>
+            <p id="planet-info"></p>
+        </div>
+
+
+    </div>
+
+    <script>
+        // Planet data
+        const planetData = {
+            Mercury: { name: "Mercury", info: "is the closest planet to the Sun, experiencing extreme temperature variations and average distance of 0.39 AU from the Sun." },
+            Venus: { name: "Venus", info: "Known for its thick, toxic atmosphere and scorching temperature, located about 0.72 AU from the Sun." },
+
+            Earth: { name: "Earth", info: "is the only planet known to support life, featuring diverse ecosystems. It revolves around the Sun in an anticlockwise direction at an average speed of about 30 km/sec, completing one full orbit in about 365 days, while an average distance of about 1 AU from the Sun." },
+
+            Moon: { name: "Moon", info: "is Earth’s natural satellite with a barren, rocky surface, located about 400,529 km away from Earth." },
+
+            Mars: { name: "Mars", info: "is the Red Planet, known for the tallest volcano in the solar system, located 1.52 AU from the Sun." },
+
+            Jupiter: { name: "Jupiter", info: "is the largest planet, features the Great Red, at a distance of about 5.2 AU from the Sun." },
+
+            Saturn: { name: "Saturn", info: "is famous for its rings, made of ice and rock particles, located about 9.54 AU from the Sun." },
+            Uranus: { name: "Uranus", info: "rotates on its side and has a blue color due to methane. It’s about 19.22 AU from the Sun." },
+            Neptune: { name: "Neptune", info: "is known for its strong winds and storms, located about 30.06 AU from the Sun." },
+            sun: { name: "Sun", info: "is the largest object in our solar system with a radius about 109 times that of Earth. It contains 99.86% of the mass of the solar system." }
+
+        };
+
+        // Audio toggle variable
+        let audioEnabled = false;
+
+        // Function to speak planet info
+        function speak(text) {
+            window.speechSynthesis.cancel(); // Clears any existing speech
+            if (audioEnabled && 'speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Function to display information and play audio on click
+        function showInfo(planet) {
+            const data = planetData[planet];
+            document.getElementById("planet-name").textContent = data.name + ": ";
+            document.getElementById("planet-info").textContent = data.info;
+            document.getElementById("info-panel").style.display = "block";
+
+            // Play audio if enabled
+            speak(`${data.name} ${data.info}`);
+        }
+
+        // Toggle audio on/off when "Audio" button is clicked
+        document.getElementById("audio-button").addEventListener("click", function () {
+            audioEnabled = !audioEnabled;
+            this.style.backgroundImage = audioEnabled
+                ? "url('./images/audio.png')"
+                : "url('./images/audiooff.png')";
+
+            // this.textContent = audioEnabled ? "url('./images/audio.png')" : "url('./images/audiooff.png')";
+            // "AudioY" : "AudioN";
+
+
+        });
+
+        // Hide the info panel when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!event.target.classList.contains("planet")) {
+                document.getElementById("info-panel").style.display = "none";
+            }
+        });
+
+        // Toggle help text display
+        document.getElementById("help-button").addEventListener("click", function () {
+            const helpText = document.getElementById("help-text-container");
+            let toggleState = helpText.getAttribute("data-toggle-state") || "0"; // Get current toggle state (default: 0)
+
+            if (toggleState === "0") {
+                // Show English help text
+                helpText.innerHTML = `
+            <p class="help-text">Click on a planet to learn more, and click on the audio to listen. Don't forget to check out the quiz!</p>
+            <p class="help-text">One astronomical unit (AU) is about 150 million kilometers</p>
+            <p class="help-text">The Earth is moving around the Sun, in a path called an orbit</p>
+            <p class="help-text" style="color: orange;">Created By DreamCare, Nov'2024</p>`;
+                helpText.style.display = "block";
+                helpText.setAttribute("data-toggle-state", "1");
+            } else if (toggleState === "1") {
+                // Show Bangla help text
+                helpText.innerHTML = `
+            <p class="help-text">গ্রহের উপর ক্লিক করে আরও জানুন এবং অডিওতে ক্লিক করে শুনুন। কুইজ দেখতে ভুলবেন না!</p>
+            <p class="help-text">একটি জ্যোতির্বিদ্যা একক (AU) প্রায় ১৫০ মিলিয়ন কিলোমিটার</p>
+            <p class="help-text">পৃথিবী সূর্যের চারপাশে একটি কক্ষপথে ঘোরে, যাকে কক্ষপথ বলা হয়</p>`;
+                helpText.style.display = "block";
+                helpText.setAttribute("data-toggle-state", "2");
+            } else {
+                // Hide the help text
+                helpText.style.display = "none";
+                helpText.setAttribute("data-toggle-state", "0");
+            }
+        });
+
+
+        // Array of quiz questions and answers
+        const quizQuestions = [
+            { question: "What planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus"], answer: "Mars" },
+            { question: "Which planet has the most moons?", options: ["Saturn", "Jupiter", "Uranus"], answer: "Jupiter" },
+            { question: "What is the closest planet to the Sun?", options: ["Mercury", "Venus", "Earth"], answer: "Mercury" },
+            { question: "Which planet is known as the Gas Giant?", options: ["Mars", "Earth", "Jupiter"], answer: "Jupiter" },
+            { question: "Which planet is the hottest in our solar system?", options: ["Mercury", "Venus", "Mars"], answer: "Venus" },
+            { question: "Which planet has a dark blue color due to methane in its atmosphere?", options: ["Neptune", "Uranus", "Earth"], answer: "Neptune" },
+        //next
+            { question: "Which planet is famous for its rings?", options: ["Uranus", "Saturn", "Neptune"], answer: "Saturn" }, { question: "What is the average distance of Earth from the Sun?", options: ["0.72 AU", "1 AU", "1.52 AU"], answer: "1 AU" },
+            { question: "Which planet rotates on its side?", options: ["Uranus", "Venus", "Mars"], answer: "Uranus" },
+            { question: "Which planet has the tallest volcano in the solar system?", options: ["Earth", "Mars", "Jupiter"], answer: "Mars" },
+            { question: "What is the name of Earth's natural satellite?", options: ["Moon", "Io", "Europa"], answer: "Moon" }, { question: "Which planet has the Great Red Spot?", options: ["Saturn", "Jupiter", "Neptune"], answer: "Jupiter" },
+            { question: "Which object contains 99.86% of the mass in the solar system?", options: ["Earth", "Sun", "Jupiter"], answer: "Sun" },
+            { question: "Which planet is the only one known to support life?", options: ["Earth", "Mars", "Venus"], answer: "Earth" },
+            { question: "What is the approximate distance of Neptune from the Sun?", options: ["19.22 AU", "30.06 AU", "9.54 AU"], answer: "30.06 AU" }
+
+        ];
+
+        // Array of fun facts about the solar system
+        const funFacts = [
+           "Venus spins so slowly that a single day is longer than its entire year!",
+            "Jupiter’s Great Red Spot is a massive storm that’s been swirling for over 350 years!",
+            "One year on Neptune equals 165 Earth years. Imagine celebrating your first birthday there!",
+            "Saturn has more than 80 moons orbiting it.",
+            "Mercury’s lack of atmosphere leads to wild temperature swings, from scorching heat to freezing cold."
+        ];
+
+        let currentQuestionIndex = 0; // Track the current quiz question
+        let displayMode = 0; // 0: off, 1: quiz question, 2: fun fact
+
+        // Function to toggle between quiz question, fun fact, and off
+        document.getElementById("quiz-button").onclick = () => {
+            const quizContainer = document.getElementById("quiz-container");
+            const factContainer = document.getElementById("fact-container");
+
+            // Hide both containers initially
+            quizContainer.style.display = "none";
+            factContainer.style.display = "none";
+
+            // Cycle through the modes
+            if (displayMode === 0) {
+                displayMode = 1;
+                showQuizQuestion();
+            } else if (displayMode === 1) {
+                displayMode = 2;
+                showFunFact();
+            } else {
+                displayMode = 0;
+            }
+        };
+
+        // Function to display the current quiz question
+        function showQuizQuestion() {
+            const quizContainer = document.getElementById("quiz-container");
+            const questionElement = document.getElementById("quiz-question");
+            const optionsElement = document.getElementById("quiz-options");
+            const feedbackElement = document.getElementById("quiz-feedback");
+            const nextButton = document.getElementById("next-question");
+
+            quizContainer.style.display = "block";
+            feedbackElement.style.display = "none";
+            nextButton.style.display = "none";
+
+            const questionData = quizQuestions[currentQuestionIndex];
+            questionElement.textContent = questionData.question;
+            optionsElement.innerHTML = "";
+
+            // Display answer options as buttons
+            // Define a color palette for options
+            const colors = ["#4CAF50", "#f44336", "#FFC107", "#2196F3", "#9C27B0", "#FF5722"];
+
+            // Display answer options as buttons
+            questionData.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+
+                // Assign a color from the palette based on the index
+                button.style.backgroundColor = colors[index % colors.length]; // Cycle through colors
+                button.style.color = "#000099";
+                // button.style.color = "#00008B"; 
+                // White text for better contrast
+                // button.style.color = "#fff"; // White text for better contrast
+                button.style.padding = "5px";
+                button.style.margin = "5px";
+                button.style.border = "none";
+                button.style.borderRadius = "5px";
+                button.style.cursor = "pointer";
+
+                button.onclick = () => checkAnswer(option);
+                optionsElement.appendChild(button);
+            });
+        }
+
+        // Function to check if the selected answer is correct
+        function checkAnswer(selectedOption) {
+            const feedbackElement = document.getElementById("quiz-feedback");
+            const nextButton = document.getElementById("next-question");
+
+            if (selectedOption === quizQuestions[currentQuestionIndex].answer) {
+                feedbackElement.textContent = "Correct!";
+            } else {
+                feedbackElement.textContent = `Incorrect: Answer is ${quizQuestions[currentQuestionIndex].answer}.`;
+            }
+
+            feedbackElement.style.display = "block";
+            nextButton.style.display = "inline-block";
+        }
+
+        // Handle "Next Question" button click
+        document.getElementById("next-question").onclick = () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                showQuizQuestion();
+            } else {
+                document.getElementById("quiz-container").style.display = "none";
+                showFunFact();
+                displayMode = 2;
+                currentQuestionIndex = 0;
+            }
+        };
+
+        // Display a random fun fact
+        function showFunFact() {
+            const factContainer = document.getElementById("fact-container");
+            const factElement = document.getElementById("fun-fact");
+
+            factContainer.style.display = "block";
+            factElement.textContent = funFacts[Math.floor(Math.random() * funFacts.length)];
+
+            // Hide fact after 5 seconds
+            setTimeout(() => {
+                if (displayMode === 2) factContainer.style.display = "none";
+            }, 6500);
+        }
+
+    </script>
+
+</body>
+
+</html>
